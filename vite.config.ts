@@ -9,9 +9,9 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-	        'resources/js/app.ts',
-		'resources/js/echo.js'
-	    ],
+                'resources/js/app.ts',
+                'resources/js/echo.js'
+            ],
             refresh: true,
         }),
         vue({
