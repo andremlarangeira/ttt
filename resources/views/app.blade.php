@@ -17,7 +17,7 @@
 
 </head>
 
-<body class="h-full bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4 transition-colors duration-300">
+<body class="h-screen w-screen bg-gray-100 dark:bg-gray-900 p-4 transition-colors duration-300">
     @inertia
 </body>
 

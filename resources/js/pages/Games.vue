@@ -1,15 +1,15 @@
 <script setup>
-import { Head, router } from '@inertiajs/vue3'
+import { Head, router, Link } from '@inertiajs/vue3'
 import { onMounted, ref } from 'vue'
 import DialogBase from '@/components/DialogBase.vue'
+import themeToggler from '@/components/themeToggler.vue'
+import BaseButtonMini from '@/components/BaseButtonMini.vue'
 
 const props = defineProps({ game: Object, user: Object })
 
 const cellsRef = ref([])
 
 const statusRef = ref(null)
-
-const themeToggleRef = ref(null)
 
 const waitPlayerDialog = ref(true)
 
@@ -96,11 +96,6 @@ function resetClick (currPlayer = 'X') {
     updateGame()
 }
 
-function themeToggle () {
-    document.documentElement.classList.toggle('dark')
-    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light')
-}
-
 function updateGame() {
     const data = {
         board: gameData.value.board,
@@ -170,32 +165,25 @@ onMounted(() => {
 
 <template>
     <Head title="TicTacToe"></Head>
-    <div class="w-[400px] space-y-12" :class="{ 'pointer-events-none': waitPlayerDialog }">
+    <div class="w-[90%] md:w-[400px] mx-auto space-y-12" :class="{ 'pointer-events-none': waitPlayerDialog }">
         <!-- Header -->
         <div class="flex justify-center items-center">
             <h1 class="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                Jogo da Velha
+                                VELHA INFINITA
+
             </h1>
-            <button ref="themeToggleRef" class="ml-8 -p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" @click="themeToggle">
-                <svg id="sun-icon" class="w-6 h-6 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-                <svg id="moon-icon" class="w-6 h-6 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-            </button>
+            <theme-toggler />
         </div>
 
         <!-- Game Status -->
         <div class="text-center">
             <p ref="statusRef" class="text-lg font-medium text-gray-800 dark:text-gray-200">{{ isPlayerTurn() ? 'Sua vez!' : 'Vez do outro jogador' }}</p>
-            <button id="reset-btn" class="mt-2 px-4 py-2 bg-accent text-white rounded-lg hover:bg-opacity-90 transition-colors" @click="resetClick">Reiniciar Jogo</button>
         </div>
 
         <!-- Game Board -->
         <div class="grid grid-cols-3 gap-3 mx-auto">
             <div
-                class="aspect-square bg-white dark:bg-gray-800 rounded-md shadow-lg flex items-center justify-center text-8xl font-bold cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                class="aspect-square bg-white dark:bg-gray-800 rounded-md shadow-lg flex items-center justify-center text-7xl md:text-8xl font-bold cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 v-for="item in 9"
                 ref="cellsRef"
                 :key="item"
@@ -203,15 +191,16 @@ onMounted(() => {
             ></div>
         </div>
 
-        <div>
-            {{ gameData }}
+        <div class="flex flex-col space-y-4 items-center">
+            <base-button-mini @click="resetClick">Reiniciar Jogo</base-button-mini>
+            <base-button-mini @click="router.visit('/')">Voltar</base-button-mini>
         </div>
     </div>
 
     <dialog-base :dialogVisible="waitPlayerDialog">
         <div
             data-dialog="dialog"
-            class="relative m-4 p-6 w-2/5 min-w-[40%] max-w-[40%] rounded-lg bg-white dark:bg-gray-800 shadow-sm"
+            class="relative m-4 p-6 w-[90%] md:w-2/5 md:min-w-[40%] md:max-w-[40%] rounded-lg bg-white dark:bg-gray-800 shadow-sm"
         >
             <div class="flex shrink-0 items-center pb-4 text-2xl font-bold text-slate-800 dark:text-slate-200">
                 Esperando o outro jogador
@@ -230,7 +219,7 @@ onMounted(() => {
     <dialog-base :dialogVisible="winnerDialog">
         <div
             data-dialog="dialog"
-            class="relative m-4 p-6 w-2/5 min-w-[40%] max-w-[40%] rounded-lg bg-white dark:bg-gray-800 shadow-sm"
+            class="relative m-4 p-6 w-[90%] md:w-2/5 md:min-w-[40%] md:max-w-[40%] rounded-lg bg-white dark:bg-gray-800 shadow-sm"
         >
             <div class="flex shrink-0 items-center pb-4 text-2xl font-bold text-slate-800 dark:text-slate-200">
                 Fim de Jogo
